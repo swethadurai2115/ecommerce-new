@@ -31,11 +31,10 @@ const generateToken = (user) => {
     // Retrieve the secret from environment variables
     const secretKey = process.env.JWT_SECRET;
 
-    // Check if the secret key is defined
+
     if (!secretKey) {
         throw new Error('Secret key not defined in environment variables');
     }
 
-    // Sign the token
     return jwt.sign({ id: user._id }, secretKey, { expiresIn: '1h' });
 };
