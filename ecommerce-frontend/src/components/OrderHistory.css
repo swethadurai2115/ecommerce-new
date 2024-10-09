@@ -1,0 +1,35 @@
+/* src/components/OrderHistory.css */
+.order-history {
+    max-width: 800px;
+    margin: 50px auto;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+}
+
+.order {
+    border-bottom: 1px solid #eee;
+    padding: 10px 0;
+}
+
+.order h3 {
+    margin: 0 0 10px;
+}
+
+.order p {
+    font-size: 14px;
+}
+
+.order ul {
+    padding-left: 20px;
+    margin: 0;
+}
+
+.order ul li {
+    list-style-type: disc;
+}
+
+.order-total {
+    font-weight: bold;
+    margin-top: 10px;
+}
