@@ -1,34 +1,13 @@
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
-import { Link } from 'react-router-dom';
+import React from 'react';
+import ProductList from '../components/ProductList';
 
-function HomePage() {
-  const [products, setProducts] = useState([]);
-
-  useEffect(() => {
-    const fetchProducts = async () => {
-      const { data } = await axios.get('/api/products');
-      setProducts(data);
-    };
-    fetchProducts();
-  }, []);
-
+const HomePage = () => {
   return (
     <div>
-      <h1>Products</h1>
-      <div className="product-list">
-        {products.map((product) => (
-          <div key={product._id} className="product-item">
-            <Link to={`/product/${product._id}`}>
-              <img src={product.imageUrl} alt={product.name} />
-              <h2>{product.name}</h2>
-              <p>${product.price}</p>
-            </Link>
-          </div>
-        ))}
-      </div>
+      <h1>Latest Products</h1>
+      <ProductList />
     </div>
   );
-}
+};
 
 export default HomePage;
