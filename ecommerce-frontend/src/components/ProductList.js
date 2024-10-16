@@ -1,48 +1,48 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import { CartContext } from '../context/CartContext';
 
 const ProductList = () => {
-  const [products, setProducts] = useState([]);
-  const { addToCart } = useContext(CartContext);
+    const [products, setProducts] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
 
-  useEffect(() => {
-    const fetchProducts = async () => {
-      const res = await axios.get('/api/products');
-      setProducts(res.data);
-    };
-    fetchProducts();
-  }, []);
+    useEffect(() => {
+        const fetchProducts = async () => {
+            try {
+                const response = await axios.get('http://localhost:5000/api/products');
+                setProducts(response.data);
+                setLoading(false);
+            } catch (err) {
+                setError('Error fetching products');
+                setLoading(false);
+            }
+        };
 
-  return (
-    <div>
-      <h2>Product List</h2>
-      <div>
-        {products.map(product => (
-          <div key={product._id} style={styles.product}>
-            <img src={product.imageUrl} alt={product.name} style={styles.image} />
-            <h3>{product.name}</h3>
-            <p>{product.description}</p>
-            <p>${product.price}</p>
-            <button onClick={() => addToCart(product, 1)}>Add to Cart</button>
-          </div>
-        ))}
-      </div>
-    </div>
-  );
-};
+        fetchProducts();
+    }, []);
 
-const styles = {
-  product: {
-    border: '1px solid #ddd',
-    padding: '10px',
-    marginBottom: '20px',
-    borderRadius: '5px',
-  },
-  image: {
-    width: '150px',
-    height: '150px',
-  },
+    if (loading) return <p>Loading...</p>;
+    if (error) return <p>{error}</p>;
+
+    return (
+        <div>
+            <h2>Product List</h2>
+            {products.length === 0 ? (
+                <p>No products available</p>
+            ) : (
+                <ul>
+                    {products.map((product) => (
+                        <li key={product._id}>
+                            <h3>{product.name}</h3>
+                            <p>{product.description}</p>
+                            <p>Price: ${product.price}</p>
+                            <p>Category: {product.category}</p>
+                        </li>
+                    ))}
+                </ul>
+            )}
+        </div>
+    );
 };
 
 export default ProductList;
