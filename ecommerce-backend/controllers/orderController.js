@@ -1,54 +1,25 @@
-const Order = require('../models/Order');
+const orderModel = require('../models/Order');
+const productModel = require('../models/Product');
 
-// @desc    Create new order
-// @route   POST /api/orders
-// @access  Private
-const addOrderItems = async (req, res) => {
-  const {
-    orderItems,
-    shippingAddress,
-    paymentMethod,
-    totalPrice,
-  } = req.body;
+//Create Order - /api/v1/order 
+exports.createOrder = async (req, res, next) => {
+    const cartItems = req.body;
+    const amount = Number(cartItems.reduce((acc, item) => (acc + item.product.price * item.qty), 0)).toFixed(2);
+    const status = 'pending';
+    const order = await orderModel.create({cartItems, amount, status})
 
-  if (orderItems && orderItems.length === 0) {
-    return res.status(400).json({ message: 'No order items' });
-  }
+    // Updating product stock
+    cartItems.forEach(async (item)=> {
+        const product = await productModel.findById(item.product._id);
+        product.stock = product.stock - item.qty;
+        await product.save();
+    })
 
-  try {
-    const order = new Order({
-      user: req.user._id,
-      orderItems,
-      shippingAddress,
-      paymentMethod,
-      totalPrice,
-    });
 
-    const createdOrder = await order.save();
-    res.status(201).json(createdOrder);
-  } catch (error) {
-    res.status(500).json({ message: 'Server Error' });
-  }
-};
-
-// @desc    Get order by ID
-// @route   GET /api/orders/:id
-// @access  Private
-const getOrderById = async (req, res) => {
-  try {
-    const order = await Order.findById(req.params.id).populate('user', 'name email');
-
-    if (order) {
-      res.json(order);
-    } else {
-      res.status(404).json({ message: 'Order not found' });
-    }
-  } catch (error) {
-    res.status(500).json({ message: 'Server Error' });
-  }
-};
-
-module.exports = {
-  addOrderItems,
-  getOrderById,
-};
+    res.json(
+        {
+            success:true,
+            order
+        }
+    )
+}

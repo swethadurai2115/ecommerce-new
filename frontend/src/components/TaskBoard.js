@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import TaskCard from './TaskCard';
 import { fetchTasks, createTask } from '../api';
-
+import './TaskBoard.css'
 const TaskBoard = () => {
   const [tasks, setTasks] = useState([]);
   const [newTask, setNewTask] = useState('');
