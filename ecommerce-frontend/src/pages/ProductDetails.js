@@ -61,7 +61,7 @@ export default function ProductDetail({ cartItems, setCartItems }) {
             <p id="product_id">Product #{product._id}</p>
 
             <hr />
-
+  
             <div className="rating-outer">
               <div
                 className="rating-inner"
