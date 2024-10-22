@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom'; // Import Link for navigation
 import axios from 'axios';
 import './style.css';
+
 const Home = () => {
     const [posts, setPosts] = useState([]);
 
@@ -16,10 +17,19 @@ const Home = () => {
     return (
         <div>
             <h1>Blog Posts</h1>
-            <Link to="/create">
-                <button className="create-post-btn">Create Post</button>
-            </Link>
 
+            {/* Button container */}
+            <div className="button-container">
+                <Link to="/login">
+                    <button className="login-btn">Login</button>
+                </Link>
+
+                <Link to="/create">
+                    <button className="create-post-btn">Create Post</button>
+                </Link>
+            </div>
+
+            {/* Post List */}
             <ul>
                 {posts.map((post) => (
                     <li key={post._id}>
